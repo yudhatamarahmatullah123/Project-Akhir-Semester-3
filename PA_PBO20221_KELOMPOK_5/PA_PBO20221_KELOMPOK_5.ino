@@ -31,115 +31,6 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 Servo palangServoMasuk;       //Class Servo Masuk
 Servo palangServoKeluar;      //Class Servo Keluar
 
-int counter     = 4;
-int Available   = 4;
-
-void setup() {
-  
-  Serial.begin(9600);
-
-  pinMode(LEDM, OUTPUT);
-  pinMode(LEDH, OUTPUT);
-
-  pinMode(pinIRin, INPUT);
-  pinMode(pinIRout, INPUT);
-
-  palangServoMasuk.attach(pinServoMasuk);
-  palangServoMasuk.write(0);
-  palangServoKeluar.attach(pinServoKeluar);
-  palangServoKeluar.write(0);
-
-  u8x8.setFont(u8x8_font_px437wyse700b_2x2_r);
-  u8x8.drawString(1, 2, "SISA");
-  u8x8.setFont(u8x8_font_px437wyse700b_2x2_r);
-  u8x8.drawString(1, 4, "SLOT");
-  u8x8.inverse();
-  u8x8.setFont(u8x8_font_inb33_3x6_n);
-  u8x8.setCursor(11, 1);
-  u8x8.print("5");
-  u8x8.noInverse();
-  digitalWrite(LEDH, LOW);
-
-  lcd.init();
-  lcd.backlight();
-  lcd.setCursor (0, 0);
-  lcd.print("   KELOMPOK 5  ");
-  lcd.setCursor (0, 1);
-  lcd.print("UNIDA GONTOR|PBO");
-  delay (2000);
-  lcd.clear();
-
-}
-
-void loop() {
-  
-  int sensorMasuk  = digitalRead(pinIRin);
-  int sensorKeluar = digitalRead(pinIRout);
-
-  Serial.println(counter);
-
-  lcd.setCursor (0,0);
-  lcd.print("    AHLAN :)    ");
-  lcd.setCursor (0,1);
-  lcd.print("Slot Left: ");
-  lcd.print(counter);
-
-  // =================================  MODEL LAMPU =================================
-  
-  if (counter == 0) {
-    digitalWrite(LEDM, LOW);
-    digitalWrite(LEDH, HIGH);
-  }
-
-  if (counter != 0) {
-    digitalWrite(LEDH, LOW);
-    digitalWrite(LEDM, HIGH);
-  }
-
-  // ================================  SENSOR MASUK  ================================
-
-  if (sensorMasuk == 0) {
-    if (counter != 0) {
-      counter--;
-      palangServoMasuk.write(terbuka);
-      delay(2000);
-      palangServoMasuk.write(tertutup);
-
-      u8x8.inverse();
-      u8x8.setFont(u8x8_font_inb33_3x6_n);
-      u8x8.setCursor(11, 1);
-      u8x8.print(counter);
-
-      Serial.println(counter);
-    } else {
-      lcd.setCursor (0,0);
-      lcd.print("    AFWAN :(    ");  
-      lcd.setCursor (0,1);
-      lcd.print("PARKIR WES FULL!"); 
-      delay (3000);
-      lcd.clear();
-    }
-  }
-
-  // ================================  SENSOR KELUAR  ================================
-
-  if (sensorKeluar == 0) {
-    if (counter != Available) {
-      counter++;
-      palangServoKeluar.write(terbuka);
-      delay(2000);
-      palangServoKeluar.write(tertutup);
-
-      u8x8.inverse();
-      u8x8.setFont(u8x8_font_inb33_3x6_n);
-      u8x8.setCursor(11, 1);
-      u8x8.print(counter);
-
-      Serial.println(counter);
-    }
-  }
-}
-
 // Constructor
 
 class data {
@@ -304,3 +195,110 @@ const unsigned char arduino [] = {
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
+
+void setup() {
+  
+  Serial.begin(9600);
+
+  pinMode(LEDM, OUTPUT);
+  pinMode(LEDH, OUTPUT);
+
+  pinMode(pinIRin, INPUT);
+  pinMode(pinIRout, INPUT);
+
+  palangServoMasuk.attach(pinServoMasuk);
+  palangServoMasuk.write(0);
+  palangServoKeluar.attach(pinServoKeluar);
+  palangServoKeluar.write(0);
+
+  u8x8.setFont(u8x8_font_px437wyse700b_2x2_r);
+  u8x8.drawString(1, 2, "SISA");
+  u8x8.setFont(u8x8_font_px437wyse700b_2x2_r);
+  u8x8.drawString(1, 4, "SLOT");
+  u8x8.inverse();
+  u8x8.setFont(u8x8_font_inb33_3x6_n);
+  u8x8.setCursor(11, 1);
+  u8x8.print("5");
+  u8x8.noInverse();
+  digitalWrite(LEDH, LOW);
+
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor (0, 0);
+  lcd.print("   KELOMPOK 5  ");
+  lcd.setCursor (0, 1);
+  lcd.print("UNIDA GONTOR|PBO");
+  delay (2000);
+  lcd.clear();
+
+}
+
+void loop() {
+  
+  int sensorMasuk  = digitalRead(pinIRin);
+  int sensorKeluar = digitalRead(pinIRout);
+
+  Serial.println(counter);
+
+  lcd.setCursor (0,0);
+  lcd.print("    AHLAN :)    ");
+  lcd.setCursor (0,1);
+  lcd.print("Slot Left: ");
+  lcd.print(counter);
+
+  // =================================  MODEL LAMPU =================================
+  
+  if (counter == 0) {
+    digitalWrite(LEDM, LOW);
+    digitalWrite(LEDH, HIGH);
+  }
+
+  if (counter != 0) {
+    digitalWrite(LEDH, LOW);
+    digitalWrite(LEDM, HIGH);
+  }
+
+  // ================================  SENSOR MASUK  ================================
+
+  if (sensorMasuk == 0) {
+    if (counter != 0) {
+      counter--;
+      palangServoMasuk.write(terbuka);
+      delay(2000);
+      palangServoMasuk.write(tertutup);
+
+      u8x8.inverse();
+      u8x8.setFont(u8x8_font_inb33_3x6_n);
+      u8x8.setCursor(11, 1);
+      u8x8.print(counter);
+
+      Serial.println(counter);
+    } else {
+      lcd.setCursor (0,0);
+      lcd.print("    AFWAN :(    ");  
+      lcd.setCursor (0,1);
+      lcd.print("PARKIR WES FULL!"); 
+      delay (3000);
+      lcd.clear();
+    }
+  }
+
+  // ================================  SENSOR KELUAR  ================================
+
+  if (sensorKeluar == 0) {
+    if (counter != Available) {
+      counter++;
+      palangServoKeluar.write(terbuka);
+      delay(2000);
+      palangServoKeluar.write(tertutup);
+
+      u8x8.inverse();
+      u8x8.setFont(u8x8_font_inb33_3x6_n);
+      u8x8.setCursor(11, 1);
+      u8x8.print(counter);
+
+      Serial.println(counter);
+    }
+  }
+}
+
